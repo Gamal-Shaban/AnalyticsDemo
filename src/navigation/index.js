@@ -1,15 +1,18 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View} from 'react-native';
-import {Input} from '../components/input';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {logOut} from '../redux/slices/authSlice';
 import {LoginScreen} from '../screens/loginScreen';
 
 function HomeScreen() {
+  const dispatch = useDispatch();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Input password />
-      <Text>Home Screen</Text>
+      <TouchableOpacity onPress={() => dispatch(logOut())}>
+        <Text>logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -17,11 +20,22 @@ function HomeScreen() {
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
+  const {userData} = useSelector(state => ({
+    userData: state.user?.userData,
+  }));
+  console.log('userData', userData);
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="home" component={HomeScreen} />
+        {userData?.token ? (
+          <>
+            <Stack.Screen name="home" component={HomeScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="login" component={LoginScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
