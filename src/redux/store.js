@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {configureStore, createDynamicMiddleware} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import {persistReducer, persistStore} from 'redux-persist';
 import rootReducer from './reducers'; // Assuming you have your root reducer in this file
@@ -11,7 +11,6 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const dynamicMiddleware = createDynamicMiddleware();
 const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
