@@ -14,7 +14,6 @@ const authSlice = createSlice({
   },
   reducers: {
     login(state, action) {
-      console.log('action: ' + action);
       state.errorMessage = null;
       const getUser = userList?.find(
         user =>
