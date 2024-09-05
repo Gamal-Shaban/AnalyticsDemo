@@ -21,7 +21,6 @@ const authSlice = createSlice({
           user.password === action?.payload.password,
       );
       if (getUser) {
-        alert(getUser);
         state.userData = getUser;
       } else {
         state.errorMessage = 'Invalid username or password';

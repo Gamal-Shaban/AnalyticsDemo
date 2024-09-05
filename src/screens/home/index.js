@@ -1,9 +1,10 @@
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   Dimensions,
   FlatList,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -121,12 +122,6 @@ export const Home = () => {
       <TouchableOpacity
         style={styles.logOutButton}
         onPress={() => {
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{name: 'login'}],
-            }),
-          );
           dispatch(logOut());
         }}>
         <Text style={styles.logOutText}>LogOut</Text>
@@ -146,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomColor: '#f0f0f0',
     borderBottomWidth: 1,
-    marginTop: 60,
+    marginTop: Platform.OS === 'ios' ? 60 : 10,
   },
   wrapper: {
     height: 250,
@@ -198,7 +193,7 @@ const styles = StyleSheet.create({
   },
   logOutButton: {
     position: 'absolute',
-    top: 65,
+    top: Platform.OS === 'ios' ? 65 : 15,
     padding: 10,
     borderRadius: 10,
     left: 20,

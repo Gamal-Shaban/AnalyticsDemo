@@ -1,4 +1,3 @@
-import android.os.Bundle
 package com.analyticsdemo
 
 import com.facebook.react.ReactActivity

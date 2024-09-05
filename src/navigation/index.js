@@ -19,17 +19,22 @@ export const Navigation = () => {
   }));
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={userData?.token ? 'home' : 'login'}>
-        <Stack.Screen
-          name="home"
-          component={Home}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name="productDetails" component={ProductDetails} />
-        <Stack.Screen name="cartScreen" component={CartScreen} />
-        <Stack.Screen name="addressScreen" component={AddressScreen} />
-        <Stack.Screen name="summaryScreen" component={SummaryScreen} />
-        <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Navigator>
+        {userData?.token ? (
+          <>
+            <Stack.Screen
+              name="home"
+              component={Home}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="productDetails" component={ProductDetails} />
+            <Stack.Screen name="cartScreen" component={CartScreen} />
+            <Stack.Screen name="addressScreen" component={AddressScreen} />
+            <Stack.Screen name="summaryScreen" component={SummaryScreen} />
+          </>
+        ) : (
+          <Stack.Screen name="login" component={LoginScreen} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
