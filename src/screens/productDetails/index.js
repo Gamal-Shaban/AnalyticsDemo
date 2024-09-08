@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {trackEvent} from '../../utils/analytics';
+import {events} from '../../utils/eventsNames';
 
 const {width} = Dimensions.get('window');
 
@@ -16,7 +18,6 @@ export const ProductDetails = ({route}) => {
   // Assuming you're using React Navigation and passing the product details via route.params
   const {image, title, price, specialPrice, id} = route.params;
   const navigation = useNavigation();
-  const [cartItems, setCartItems] = useState([]);
 
   const addToCart = () => {
     const newCartItem = {
@@ -26,8 +27,23 @@ export const ProductDetails = ({route}) => {
       price,
       specialPrice,
     };
+    trackEvent(events.add_to_cart, {
+      item_id: id,
+      item_name: title,
+      value: specialPrice || price,
+      currency: 'USD',
+    });
     navigation.navigate('cartScreen', {cartItem: newCartItem});
   };
+
+  useEffect(() => {
+    trackEvent(events.view_item, {
+      item_id: id,
+      item_name: title,
+      item_price: specialPrice || price,
+      currency: 'USD',
+    });
+  }, []);
 
   return (
     <View style={styles.container}>

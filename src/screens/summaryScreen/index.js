@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {trackEvent} from '../../utils/analytics';
+import {events} from '../../utils/eventsNames';
 
 export const SummaryScreen = () => {
   const {cartItems, address} = useRoute().params; // Get cart items and address
@@ -83,13 +85,17 @@ export const SummaryScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          // Navigate to Checkout or confirm action
-          //   navigation.navigate('CheckoutScreen', {
-          //     cartItems,
-          //     address,
-          //     totalPrice,
-          //     totalDiscount,
-          //   });
+          trackEvent(events.purchase, {
+            transaction_id: Math.floor(100000 + Math.random() * 900000),
+            value: totalPrice,
+            currency: 'USD',
+            items: cartItems.map(i => ({
+              id: i.id,
+              name: i.title,
+              price: i.specialPrice || i.price,
+              quantity: 1,
+            })),
+          });
           Alert.alert(
             'Congratulations',
             ' You Have Successfully Payed your Order',

@@ -75,6 +75,7 @@ const dataGrid = [
 export const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
   const renderGridItem = ({item}) => {
     return (
       <TouchableOpacity

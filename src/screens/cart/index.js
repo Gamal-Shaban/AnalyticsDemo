@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {trackEvent} from '../../utils/analytics';
+import {events} from '../../utils/eventsNames';
 
 const {width} = Dimensions.get('window');
 
@@ -18,7 +20,6 @@ export const CartScreen = () => {
   const {navigate} = useNavigation();
   const [cartItems, setCartItems] = useState([params?.cartItem]); // Initialize cart items from route params
 
-  console.log('params.cartItems', params.cartItems);
   // Function to handle the removal of an item
   const handleRemoveItem = id => {
     // Show confirmation alert
@@ -33,6 +34,13 @@ export const CartScreen = () => {
         {
           text: 'Remove',
           onPress: () => {
+            trackEvent(events.remove_from_cart, {
+              item_id: params?.cartItem?.id,
+              item_name: params?.cartItem?.title,
+              item_price:
+                params?.cartItem?.specialPrice || params?.cartItem?.price,
+              currency: 'USD',
+            });
             const updatedCartItems = cartItems.filter(item => item?.id !== id); // Remove the item
             setCartItems(updatedCartItems); // Update state with new cart items
           },
@@ -59,9 +67,7 @@ export const CartScreen = () => {
     return acc;
   }, 0);
 
-  console.log('data>>>');
   const renderCartItem = ({item}) => {
-    console.log('item render', item);
     return (
       <View style={styles.cartItem}>
         <Image source={{uri: item?.image}} style={styles.cartItemImage} />
@@ -87,7 +93,7 @@ export const CartScreen = () => {
       </View>
     );
   };
-
+  console.log('asdasdasdasdasdasdasdasdasdasd', cartItems);
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Cart</Text>
@@ -112,7 +118,16 @@ export const CartScreen = () => {
           {/* Continue Button */}
           <TouchableOpacity
             onPress={() => {
-              // Handle the continue button press
+              trackEvent(events.begin_checkout, {
+                value: totalPrice,
+                currency: 'USD',
+                items: cartItems.map(i => ({
+                  id: i.id,
+                  name: i.title,
+                  price: i.specialPrice || i.price,
+                  quantity: 1,
+                })),
+              });
               navigate('addressScreen', {cartItems}); // Assuming you have a Checkout screen
             }}
             style={styles.continueButton}>
