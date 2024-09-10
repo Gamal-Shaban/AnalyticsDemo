@@ -107,9 +107,11 @@ export const CartScreen = () => {
 
           {/* Total and Discount */}
           <View style={styles.summaryContainer}>
-            <Text style={styles.summaryText}>
-              Total Discount: ${totalDiscount.toFixed(2)}
-            </Text>
+            {totalDiscount > 0 && (
+              <Text style={styles.summaryText}>
+                Total Discount: ${totalDiscount.toFixed(2)}
+              </Text>
+            )}
             <Text style={styles.summaryText}>
               Total Price: ${totalPrice.toFixed(2)}
             </Text>
