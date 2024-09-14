@@ -1529,6 +1529,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - segment-analytics-react-native (2.20.0-beta.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
 
@@ -1600,6 +1621,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "segment-analytics-react-native (from `../node_modules/@segment/analytics-react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1739,6 +1761,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  segment-analytics-react-native:
+    :path: "../node_modules/@segment/analytics-react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1809,6 +1833,7 @@ SPEC CHECKSUMS:
   ReactCommon: 6ef348087d250257c44c0204461c03f036650e9b
   RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
+  segment-analytics-react-native: ef33db62ce66497e81215267ce112fc59cbfd6f9
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2a45d7e59592db061217551fd3bbe2dd993817ae
 

@@ -1,5 +1,6 @@
 // authSlice.js
 import {createSlice} from '@reduxjs/toolkit';
+import {createClient} from '@segment/analytics-react-native';
 import {mixpanel} from '../../..';
 import {trackEvent} from '../../utils/analytics';
 import {events} from '../../utils/eventsNames';
@@ -32,6 +33,11 @@ const userList = [
     phone: '789',
   },
 ];
+const segmentClient = createClient({
+  writeKey: 'TgRJo3qCLYet9GdNXioJKCttUNoThkGM',
+  trackAppLifecycleEvents: true,
+  //additional config options
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -58,6 +64,14 @@ const authSlice = createSlice({
           email: getUser?.email,
           phone: getUser?.phone,
           userId: getUser?.id,
+        });
+
+        segmentClient.identify({
+          userId: getUser?.id,
+          traits: {
+            name: getUser?.name,
+            email: getUser?.email,
+          },
         });
       } else {
         state.errorMessage = 'Invalid username or password';

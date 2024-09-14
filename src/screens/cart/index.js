@@ -93,7 +93,6 @@ export const CartScreen = () => {
       </View>
     );
   };
-  console.log('asdasdasdasdasdasdasdasdasdasd', cartItems);
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Cart</Text>
