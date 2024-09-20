@@ -1,9 +1,5 @@
 // authSlice.js
-import {createSlice} from '@reduxjs/toolkit';
-import {createClient} from '@segment/analytics-react-native';
-import {mixpanel} from '../../..';
-import {trackEvent} from '../../utils/analytics';
-import {events} from '../../utils/eventsNames';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 const userList = [
   {
     id: '1111111',
@@ -33,50 +29,60 @@ const userList = [
     phone: '789',
   },
 ];
-const segmentClient = createClient({
-  writeKey: 'TgRJo3qCLYet9GdNXioJKCttUNoThkGM',
-  trackAppLifecycleEvents: true,
-  //additional config options
-});
+
+export const login = createAsyncThunk(
+  'auth/login',
+  async (payload, {rejectWithValue}) => {
+    try {
+      // Simulate fetching user data (you can replace this with a real API call)
+
+      // Find the user in the user list
+      const getUser = userList.find(
+        user =>
+          user.username === payload?.username &&
+          user.password === payload?.password,
+      );
+
+      if (getUser) {
+        // Return user data if found
+        return getUser;
+      } else {
+        // If user not found, return error
+        return rejectWithValue('Invalid username or password');
+      }
+    } catch (error) {
+      // Catch any other errors
+      return rejectWithValue('An error occurred during login');
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     userData: null,
     errorMessage: null,
+    status: 'idle',
+  },
+  extraReducers: builder => {
+    builder
+      // Handle pending state
+      .addCase(login.pending, state => {
+        state.status = 'loading';
+        state.errorMessage = null;
+      })
+      // Handle fulfilled state (successful login)
+      .addCase(login.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.userData = action.payload; // Set user data
+      })
+      // Handle rejected state (login failure)
+      .addCase(login.rejected, (state, action) => {
+        state.status = 'failed';
+        state.errorMessage = action.payload || 'Login failed';
+      });
   },
   reducers: {
-    login(state, action) {
-      state.errorMessage = null;
-      const getUser = userList?.find(
-        user =>
-          user.username === action?.payload?.username &&
-          user.password === action?.payload.password,
-      );
-      if (getUser) {
-        state.userData = getUser;
-        mixpanel.identify(getUser?.id);
-        mixpanel.getPeople().set('$username', getUser?.username);
-        mixpanel.getPeople().set('$email', getUser?.email);
-        mixpanel.getPeople().set('$name', getUser?.name);
-        trackEvent(events.Login, {
-          name: getUser?.name,
-          email: getUser?.email,
-          phone: getUser?.phone,
-          userId: getUser?.id,
-        });
-
-        segmentClient.identify({
-          userId: getUser?.id,
-          traits: {
-            name: getUser?.name,
-            email: getUser?.email,
-          },
-        });
-      } else {
-        state.errorMessage = 'Invalid username or password';
-      }
-    },
     logOut(state) {
       state.userData = null;
       state.errorMessage = null;
@@ -84,6 +90,6 @@ const authSlice = createSlice({
   },
 });
 
-export const {login, logOut} = authSlice.actions;
+export const {logOut} = authSlice.actions;
 
 export default authSlice.reducer;
